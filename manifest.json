@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "version": "1.18",
+    "name": "LinkedIn to CSV",
+    "description": "Extract contacts as CSV",
+    "content_scripts": [{
+        "matches": ["*://*.linkedin.com/*"],
+        "js": ["content.js"]
+    }],
+    "browser_action": {
+        "default_title": "Extract",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "clipboardRead",
+        "clipboardWrite",
+        "storage"
+    ]
+}
