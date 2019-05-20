@@ -135,11 +135,11 @@ function getLinkedInFacts(document) {
   if (firstTitle.split("\n").length > 1) {
     firstTitle = firstTitle.split("\n")[1];
   }
-  var name = personName.split(" ");
+  var firstSpace = personName.indexOf(" ");
 
   return {
-    "first_name": name[0],
-    "last_name": name[1],
+    "first_name": personName.slice(0, firstSpace),
+    "last_name": personName.slice(firstSpace + 1),
     "company": firstCompany,
     "title": firstTitle
   }
