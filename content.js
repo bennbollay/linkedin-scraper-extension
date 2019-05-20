@@ -32,10 +32,64 @@ appendToClipboard = function (mime, content) {
 }
 
 // Extract a bunch of details from the DOM of this page.
-function getFacts(doc) {
+function getFacts(document) {
   console.log("BaseURI: " + document.baseURI);
 
   var pageURL = document.baseURI;
+  var facts = null;
+  if (pageURL.startsWith("https://www.linkedin.com/sales")) {
+    facts = getSalesNavigatorFacts(document);
+  } else {
+    facts = getLinkedInFacts(document);
+  }
+
+  if (facts !== null) {
+    facts.url = pageURL;
+  }
+  return facts;
+}
+
+function getSalesNavigatorFacts(document) {
+  try {
+    var personName = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div.pt6.ph0.pb0.mt2.flex.Sans-14px-black-75\\% > div > dl > dt > span").innerText.trim();
+  } catch (err) {
+    alert('Failed to acquire name: ' + err);
+    return null;
+  }
+
+  try {
+    var firstTitle = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.profile-topcard__summary-position-title").innerText.trim();
+  } catch (err) {
+    alert('Failed to acquire title: ' + err);
+    return null;
+  }
+
+  try {
+    var firstCompany = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.Sans-14px-black-75\\%-bold").innerText.trim();
+  } catch (err) {
+    try {
+      var firstCompany = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div > span > a").innerText.trim();
+    } catch (err) {
+      alert('Failed to acquire current company: ' + err);
+      return null;
+    }
+  }
+
+  // Sometimes the title comes out with a prefix of 'Title\n'.
+  if (firstTitle.split("\n").length > 1) {
+    firstTitle = firstTitle.split("\n")[1];
+  }
+  var firstSpace = personName.indexOf(" ");
+
+  return {
+    "first_name": personName.slice(0, firstSpace),
+    "last_name": personName.slice(firstSpace + 1),
+    "company": firstCompany,
+    "title": firstTitle
+  }
+}
+
+function getLinkedInFacts(document) {
   try {
     var personName = document.querySelectorAll(".pv-top-card-section__name")[0].innerText.trim();
   } catch (err) {
@@ -73,8 +127,7 @@ function getFacts(doc) {
     "first_name": name[0],
     "last_name": name[1],
     "company": firstCompany,
-    "title": firstTitle,
-    "url": pageURL
+    "title": firstTitle
   }
 }
 
