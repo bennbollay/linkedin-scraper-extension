@@ -94,7 +94,7 @@ function getFacts(doc) {
 
 // Convert the facts into a csv spaced out according to our needs.
 createCsv = function (firstName, lastName, company, title, url) {
-  return [lastName, firstName, "", "", "", "", "", "", "", company, title, url].join(","); 
+  return [lastName, firstName, "", "", "", "", "", "", "", company, title, url].join("^");
 }
 
 // Force the page to load the current job information.

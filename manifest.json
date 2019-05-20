@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "1.22",
+    "version": "1.23",
     "name": "LinkedIn to CSV",
     "description": "Extract contacts as CSV",
     "content_scripts": [{
