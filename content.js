@@ -14,13 +14,27 @@ function later(delay) {
   });
 }
 
+setClipboard = function (mime, content) {
+  // Delay long enough for the popup to close before attempting to read
+  // the clipboard.
+  later(300).then(async () => {
+    var copy = function (e) {
+      e.preventDefault();
+      e.clipboardData.setData(mime, content);
+    }
+    window.addEventListener("copy", copy);
+    document.execCommand("copy");
+    window.removeEventListener("copy", copy);
+  });
+}
+
+
 // Append the specified content to the clipboard.
 appendToClipboard = function (mime, content) {
   // Delay long enough for the popup to close before attempting to read
   // the clipboard.
   later(300).then(async () => {
     const oldClip = await navigator.clipboard.readText();
-
     var copy = function (e) {
       e.preventDefault();
       e.clipboardData.setData(mime, oldClip + content + '\n');
@@ -53,7 +67,7 @@ function getFacts(doc) {
   try {
     var firstCompany = document.querySelectorAll(".pv-entity__summary-info--background-section")[0].querySelector('.pv-entity__secondary-title').innerText.trim();
   } catch (err) {
-    console.log('Company: ', err);
+    console.log('First try failed, trying again; message: ', err);
     try {
       // Variation: https://www.linkedin.com/in/mike-tenzin-85664382/
       var firstCompany = document.querySelectorAll(".pv-entity__position-group-pager")[0].querySelector('.pv-entity__company-summary-info > h3').innerText.split('\n')[1];
@@ -80,7 +94,7 @@ function getFacts(doc) {
 
 // Convert the facts into a csv spaced out according to our needs.
 createCsv = function (firstName, lastName, company, title, url) {
-  return [lastName, firstName, "", "", "", "", "", "", company, title, url].join(","); 
+  return [lastName, firstName, "", "", "", "", "", "", "", company, title, url].join(","); 
 }
 
 // Force the page to load the current job information.
@@ -101,6 +115,11 @@ handle_message = function(facts, msg, sender, sendResponse) {
 
   var newstr = payload.interpolate({facts: facts});
 
+  chrome.storage.local.set({message: payload}, function() {
+    console.log('Value is set to ' + payload);
+  });
+
+  setClipboard("text/plain", newstr);
   sendResponse({input: payload, output: newstr});
 }
 
@@ -154,7 +173,11 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.text === "message") {
       handle_message(facts, msg, sender, sendResponse);
     }
+    if (msg.text === "paste") {
+      document.execCommand("paste");
+    }
   });
 
   return true;
 });
+
