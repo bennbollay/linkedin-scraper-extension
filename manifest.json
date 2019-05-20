@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "1.18",
+    "version": "1.23",
     "name": "LinkedIn to CSV",
     "description": "Extract contacts as CSV",
     "content_scripts": [{
@@ -10,6 +10,24 @@
     "browser_action": {
         "default_title": "Extract",
         "default_popup": "popup.html"
+    },
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "commands": {
+        "capture-csv": {
+            "suggested_key": {
+                "default": "Ctrl+I"
+            },
+            "description": "Capture the current profile to clipboard."
+        },
+        "paste-cached-message": {
+            "suggested_key": {
+                "default": "Ctrl+U"
+            },
+            "description": "Paste the cached message to the cursor."
+        }
     },
     "permissions": [
         "tabs",

@@ -18,22 +18,12 @@ msg = function(text, payload, callback=console.log, tab_id=null) {
   }
 }
 
-populate_messages = function(result) {
-  msg("log", "Received cached-message result: " + JSON.stringify(result));
-  if (result != null) {
-    $("#message").val(result.input);
-    $("#output").val(result.output);
-    $("#output").focus();
-    $("#output").select();
-    document.execCommand("copy");
-  }
-}
-
 $(function() {
   msg("log", "initialized");
 
   $("#cached-message").click(function() {
-    msg("cached-message", $("#message").val(), populate_messages);
+    msg("cached-message", $("#message").val());
+    window.close();
   });
 
   // Collect all of the tabs information, put it in the clipboard
@@ -41,7 +31,7 @@ $(function() {
     var result = [];
 
     msg("log", "starting harvest");
-    msg("harvest", "", console.log);
+    msg("harvest", "");
     window.close();
 
     /*
@@ -64,8 +54,7 @@ $(function() {
   // When content is added to the message box, populate it with details from 
   // facts.
   $("#message").keyup(function() {
-    msg("log", $("#message").val());
-    msg("log", "post");
-    msg("message", $("#message").val(), populate_messages);
+    msg("message", $("#message").val());
+    window.close();
   });
 })
