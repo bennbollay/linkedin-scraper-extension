@@ -19,8 +19,12 @@ setClipboard = function (mime, content) {
   // the clipboard.
   later(300).then(async () => {
     var copy = function (e) {
-      e.preventDefault();
-      e.clipboardData.setData(mime, content);
+      try {
+        e.preventDefault();
+        e.clipboardData.setData(mime, content);
+      } catch (err) {
+        alert('Failed to set clipboard: ' + err);
+      }
     }
     window.addEventListener("copy", copy);
     document.execCommand("copy");
@@ -36,12 +40,20 @@ appendToClipboard = function (mime, content) {
   later(300).then(async () => {
     const oldClip = await navigator.clipboard.readText();
     var copy = function (e) {
-      e.preventDefault();
-      e.clipboardData.setData(mime, oldClip + content + '\n');
+      try {
+        e.preventDefault();
+        e.clipboardData.setData(mime, oldClip + content + '\n');
+      } catch (err) {
+        alert('Failed to set clipboard: ' + err);
+      }
     }
-    window.addEventListener("copy", copy);
-    document.execCommand("copy");
-    window.removeEventListener("copy", copy);
+    try {
+      window.addEventListener("copy", copy);
+      document.execCommand("copy");
+      window.removeEventListener("copy", copy);
+    } catch (err) {
+      alert('Failed to perform clipboard operation: ' + err);
+    }
   });
 }
 
@@ -53,8 +65,12 @@ function getFacts(doc) {
   try {
     var personName = document.querySelectorAll(".pv-top-card-section__name")[0].innerText.trim();
   } catch (err) {
-    alert('Failed to acquire name: ' + err);
-    return null;
+    try {
+      var personName = document.querySelector("div.ph5.pb5 > div.display-flex.mt2 > div.flex-1.mr5 > ul:nth-child(1) > li.inline.t-24.t-black.t-normal.break-words").innerText.trim();
+    } catch (err) {
+      alert('Failed to acquire name: ' + err);
+      return null;
+    }
   }
 
   try {
@@ -72,8 +88,12 @@ function getFacts(doc) {
       // Variation: https://www.linkedin.com/in/mike-tenzin-85664382/
       var firstCompany = document.querySelectorAll(".pv-entity__position-group-pager")[0].querySelector('.pv-entity__company-summary-info > h3').innerText.split('\n')[1];
     } catch (err) {
-      alert('Failed to acquire current company: ' + err);
-      return null;
+      try {
+        var firstCompany = document.querySelector("span.pv-entity__secondary-title");
+      } catch (err) {
+        alert('Failed to acquire current company: ' + err);
+        return null;
+      }
     }
   }
 
@@ -94,7 +114,20 @@ function getFacts(doc) {
 
 // Convert the facts into a csv spaced out according to our needs.
 createCsv = function (firstName, lastName, company, title, url) {
-  return [lastName, firstName, "", "", "", "", "", "", "", company, title, url].join("^");
+  return [
+    lastName,   // A
+    firstName,  // B
+    "",         // C
+    "",         // D
+    "",         // E
+    "",         // F
+    "",         // G
+    "",         // H
+    "",         // I
+    company,    // J
+    title,      // K
+    url         // L
+  ].join("^");
 }
 
 // Force the page to load the current job information.
