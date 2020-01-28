@@ -176,10 +176,9 @@ createCsv = function (firstName, lastName, company, title, url) {
     "",         // F
     "",         // G
     "",         // H
-    "",         // I
-    company,    // J
-    title,      // K
-    url         // L
+    company,    // I
+    title,      // J
+    url         // K
   ].join("^");
 }
 

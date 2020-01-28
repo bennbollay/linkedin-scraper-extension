@@ -1,3 +1,11 @@
+# Installation
+
+Open up `chrome://extensions` and select `Load Unpacked Extension`.  Point it to the directory that you downloaded the plugin to.
+
+Modify `content.js`/`createCsv` to produce the desired CSV format.
+
+# Usage
+
 1. Clear your paste buffer:
   ```
   # MacOS
@@ -6,7 +14,7 @@
 
 2. Open all of the entries you care about in tabs on a browser window.
 
-3. For each tab, click on the L and click on the "Append to Clipboard" button.
+3. For each tab, click on the L and click on the "Append to Clipboard" button.  Or use the Ctrl-I hotkey to do it by hand.
 
 4. Paste that into the bottom of the contacts list
 
@@ -58,4 +66,4 @@ Available keys:
 
 18. Send, close the tab
 
-19. On the next tab, click the "Load Cached Message", and follow the steps from 14-19 until done.
+19. On the next tab, click the "Load Cached Message", and follow the steps from 14-19 until done.  Or use the hotkey Ctrl-U.
