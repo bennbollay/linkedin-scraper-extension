@@ -32,15 +32,20 @@ I am examining AI-driven video analysis of human action and operations at the Al
 
 Cheers,
 --B 
+
 ```
 
 Available keys:
-    * `${facts.first_name}`
-    * `${facts.last_name}`
-    * `${facts.company}`
-    * `${facts.company}`
-    * `${facts.title}`
-    * `${facts.url}`
+
+  * `${facts.first_name}`
+
+  * `${facts.last_name}`
+
+  * `${facts.company}`
+
+  * `${facts.title}`
+
+  * `${facts.url}`
 
 ## Message sending phase
 
