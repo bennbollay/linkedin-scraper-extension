@@ -1,8 +1,14 @@
 # Installation
 
-Open up `chrome://extensions` and select `Load Unpacked Extension`.  Point it to the directory that you downloaded the plugin to.
+1) Download the full repo as a zip file from Github website.
 
-Modify `content.js`/`createCsv` to produce the desired CSV format.
+2) Unpack the zip file and note the location of unpacked 'linkedin-scraper-extension-master' folder 
+
+3) Open up `chrome://extensions` and select Developer mode using toggle on top right corner of Chrome window (should be in the same menu bar as the "Extensions" menu on left)
+
+4) An additional option labeled `Load Unpacked` will appear.  Click it and point the folder selection dialog to the 'linkedin-scraper-extension' folder that you unpacked the plugin in step 2 to.
+
+5) Modify `content.js`/`createCsv` to produce the desired CSV format.
 
 # Usage
 
