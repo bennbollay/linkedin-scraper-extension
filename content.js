@@ -1,15 +1,15 @@
 console.log("Content.js load");
 
 // Convienence function to convert "" strings to `` strings.
-String.prototype.interpolate = function(params) {
+String.prototype.interpolate = function (params) {
   const names = Object.keys(params);
   const vals = Object.values(params);
   return new Function(...names, `return \`${this}\`;`)(...vals);
-}
+};
 
 // Convienence function to convert a setTimeout to a delay.
 function later(delay) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     setTimeout(resolve, delay);
   });
 }
@@ -23,15 +23,14 @@ setClipboard = function (mime, content) {
         e.preventDefault();
         e.clipboardData.setData(mime, content);
       } catch (err) {
-        alert('Failed to set clipboard: ' + err);
+        alert("Failed to set clipboard: " + err);
       }
-    }
+    };
     window.addEventListener("copy", copy);
     document.execCommand("copy");
     window.removeEventListener("copy", copy);
   });
-}
-
+};
 
 // Append the specified content to the clipboard.
 appendToClipboard = function (mime, content) {
@@ -42,20 +41,20 @@ appendToClipboard = function (mime, content) {
     var copy = function (e) {
       try {
         e.preventDefault();
-        e.clipboardData.setData(mime, oldClip + content + '\n');
+        e.clipboardData.setData(mime, oldClip + content + "\n");
       } catch (err) {
-        alert('Failed to set clipboard: ' + err);
+        alert("Failed to set clipboard: " + err);
       }
-    }
+    };
     try {
       window.addEventListener("copy", copy);
       document.execCommand("copy");
       window.removeEventListener("copy", copy);
     } catch (err) {
-      alert('Failed to perform clipboard operation: ' + err);
+      alert("Failed to perform clipboard operation: " + err);
     }
   });
-}
+};
 
 // Extract a bunch of details from the DOM of this page.
 function getFacts(document) {
@@ -77,26 +76,42 @@ function getFacts(document) {
 
 function getSalesNavigatorFacts(document) {
   try {
-    var personName = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div.pt6.ph0.pb0.mt2.flex.Sans-14px-black-75\\% > div > dl > dt > span").innerText.trim();
+    var personName = document
+      .querySelector(
+        "#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div.pt6.ph0.pb0.mt2.flex.Sans-14px-black-75\\% > div > dl > dt > span"
+      )
+      .innerText.trim();
   } catch (err) {
-    alert('Failed to acquire name: ' + err);
+    alert("Failed to acquire name: " + err);
     return null;
   }
 
   try {
-    var firstTitle = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.profile-topcard__summary-position-title").innerText.trim();
+    var firstTitle = document
+      .querySelector(
+        "#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.profile-topcard__summary-position-title"
+      )
+      .innerText.trim();
   } catch (err) {
-    alert('Failed to acquire title: ' + err);
+    alert("Failed to acquire title: " + err);
     return null;
   }
 
   try {
-    var firstCompany = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.Sans-14px-black-75\\%-bold").innerText.trim();
+    var firstCompany = document
+      .querySelector(
+        "#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div:nth-child(1) > span > span.Sans-14px-black-75\\%-bold"
+      )
+      .innerText.trim();
   } catch (err) {
     try {
-      var firstCompany = document.querySelector("#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div > span > a").innerText.trim();
+      var firstCompany = document
+        .querySelector(
+          "#content-main > div.profile-topcard.full-width.pb5 > div.container > div > div.flex-1.mr2 > div:nth-child(2) > dl > dd.profile-topcard__current-positions.flex.mt3 > div > div > span > a"
+        )
+        .innerText.trim();
     } catch (err) {
-      alert('Failed to acquire current company: ' + err);
+      alert("Failed to acquire current company: " + err);
       return null;
     }
   }
@@ -108,11 +123,11 @@ function getSalesNavigatorFacts(document) {
   var firstSpace = personName.indexOf(" ");
 
   return {
-    "first_name": personName.slice(0, firstSpace),
-    "last_name": personName.slice(firstSpace + 1),
-    "company": firstCompany,
-    "title": firstTitle
-  }
+    first_name: personName.slice(0, firstSpace),
+    last_name: personName.slice(firstSpace + 1),
+    company: firstCompany,
+    title: firstTitle,
+  };
 }
 
 function getLinkedInFacts(document) {
@@ -120,32 +135,42 @@ function getLinkedInFacts(document) {
     var personName = document.querySelectorAll(".pv-top-card-section__name")[0].innerText.trim();
   } catch (err) {
     try {
-      var personName = document.querySelector("div.ph5.pb5 > div.display-flex.mt2 > div.flex-1.mr5 > ul:nth-child(1) > li.inline.t-24.t-black.t-normal.break-words").innerText.trim();
+      var personName = document
+        .querySelector("div.ph5 > div.display-flex.justify-space-between.pt2 > div > div:nth-child(1) > h1")
+        .innerText.trim();
     } catch (err) {
-      alert('Failed to acquire name: ' + err);
+      alert("Failed to acquire name: " + err);
       return null;
     }
   }
 
   try {
-    var firstTitle = document.querySelectorAll(".pv-entity__summary-info--background-section > h3")[0].innerText.trim();
+    var firstTitle = document
+      .querySelectorAll(".pv-entity__summary-info--background-section > h3")[0]
+      .innerText.trim();
   } catch (err) {
-    alert('Failed to acquire title: ' + err);
+    alert("Failed to acquire title: " + err);
     return null;
   }
 
   try {
-    var firstCompany = document.querySelectorAll(".pv-entity__summary-info--background-section")[0].querySelector('.pv-entity__secondary-title').innerText.trim();
+    var firstCompany = document
+      .querySelectorAll(".pv-entity__summary-info--background-section")[0]
+      .querySelector(".pv-entity__secondary-title")
+      .innerText.trim();
   } catch (err) {
-    console.log('First try failed, trying again; message: ', err);
+    console.log("First try failed, trying again; message: ", err);
     try {
       // Variation: https://www.linkedin.com/in/mike-tenzin-85664382/
-      var firstCompany = document.querySelectorAll(".pv-entity__position-group-pager")[0].querySelector('.pv-entity__company-summary-info > h3').innerText.split('\n')[1];
+      var firstCompany = document
+        .querySelectorAll(".pv-entity__position-group-pager")[0]
+        .querySelector(".pv-entity__company-summary-info > h3")
+        .innerText.split("\n")[1];
     } catch (err) {
       try {
         var firstCompany = document.querySelector("span.pv-entity__secondary-title");
       } catch (err) {
-        alert('Failed to acquire current company: ' + err);
+        alert("Failed to acquire current company: " + err);
         return null;
       }
     }
@@ -158,55 +183,55 @@ function getLinkedInFacts(document) {
   var firstSpace = personName.indexOf(" ");
 
   return {
-    "first_name": personName.slice(0, firstSpace),
-    "last_name": personName.slice(firstSpace + 1),
-    "company": firstCompany,
-    "title": firstTitle
-  }
+    first_name: personName.slice(0, firstSpace),
+    last_name: personName.slice(firstSpace + 1),
+    company: firstCompany,
+    title: firstTitle,
+  };
 }
 
 // Convert the facts into a csv spaced out according to our needs.
 createCsv = function (firstName, lastName, company, title, url) {
   return [
-    lastName,   // A
-    firstName,  // B
-    "",         // C
-    "",         // D
-    "",         // E
-    "",         // F
-    "",         // G
-    "",         // H
-    company,    // I
-    title,      // J
-    url         // K
+    lastName, // A
+    firstName, // B
+    "", // C
+    "", // D
+    "", // E
+    "", // F
+    "", // G
+    "", // H
+    company, // I
+    title, // J
+    url, // K
   ].join("^");
-}
+};
 
 // Force the page to load the current job information.
-loadPage = function() {
+loadPage = function () {
   console.log("Attempting to load page");
 
   window.scrollTo(0, 600);
   var waitForLoad = later(200);
 
   return waitForLoad;
-}
+};
 
-handle_message = function(facts, msg, sender, sendResponse) {
+handle_message = function (facts, msg, sender, sendResponse) {
   var payload = msg.payload;
 
   console.log("Parsing message with facts:", payload);
   console.log(facts);
 
-  var newstr = payload.interpolate({facts: facts});
+  var newstr = payload.interpolate({ facts: facts });
 
-  chrome.storage.local.set({message: payload}, function() {
-    console.log('Value is set to ' + payload);
+  chrome.storage.local.set({ message: payload }, function () {
+    console.log("Value is set to " + payload);
   });
 
   setClipboard("text/plain", newstr);
-  sendResponse({input: payload, output: newstr});
-}
+  sendResponse({ input: payload, output: newstr });
+};
 
 // Do what's necessary for each message.
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
@@ -219,7 +244,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   }
 
   // Pretty much everything else needs the page to be loaded.
-  loadPage().then(function() {
+  loadPage().then(function () {
     console.log("Page loaded");
     window.scrollTo(0, 0);
 
@@ -241,9 +266,9 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (msg.text === "cached-message") {
       console.log("Checking to see if there's a cached payload");
 
-      chrome.storage.local.get(['message'], function(result) {
-        console.log('Value currently is ' + result.message);
-        if (typeof result.message !== 'undefined') {
+      chrome.storage.local.get(["message"], function (result) {
+        console.log("Value currently is " + result.message);
+        if (typeof result.message !== "undefined") {
           console.log("Treating this as a 'message' event");
           msg.text = "message";
           msg.payload = result.message;
@@ -266,4 +291,3 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
   return true;
 });
-

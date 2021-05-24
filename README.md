@@ -10,6 +10,8 @@ Modify `content.js`/`createCsv` to produce the desired CSV format.
   ```
   # MacOS
   $ pbcopy < /dev/null
+  # Windows
+  c:\> echo off | clip
   ```
 
 2. Open all of the entries you care about in tabs on a browser window.
